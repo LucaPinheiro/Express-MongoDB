@@ -1,10 +1,14 @@
 import { autor } from "../models/Autor.js";
 
 class AutorController {
+  
   static listarAutores = async (req, res) => {
-    const autoresResultado = await autor.find();
-
-    res.status(200).json(autoresResultado);
+    try {
+      const autoresResultado = await autor.find();
+      res.status(200).json(autoresResultado);
+    } catch (error) {
+      res.status(500).json({ message: "erro interno no servidor" });
+    }
   };
 
   static async listarAutorPorId(req, res) {
