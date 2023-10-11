@@ -6,7 +6,7 @@ class AutorController {
     try {
       const autoresResultado = await autor.find();
       res.status(200).json(autoresResultado);
-    } catch (error) {
+    } catch (erro) {
       res.status(500).json({ message: "erro interno no servidor" });
     }
   };
