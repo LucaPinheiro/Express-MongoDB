@@ -1,7 +1,7 @@
 import { autor } from "../models/Autor.js";
 
 class AutorController {
-  static listaAutores = async (req, res) => {
+  static listarAutores = async (req, res) => {
     const autoresResultado = await autor.find();
 
     res.status(200).json(autoresResultado);
