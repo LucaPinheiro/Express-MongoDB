@@ -9,7 +9,7 @@ class AutorController {
     } catch (erro) {
       res.status(500).json({ message: `${erro.message} - falha na requisição` });
     }
-  };
+  }
 
   static async listarAutorPorId (req, res) {
     try {
@@ -19,7 +19,7 @@ class AutorController {
     } catch (erro) {
       res.status(500).json({ message: `${erro.message} - falha na requisição do autor` });
     }
-  };
+  }
 
   static async cadastrarAutor (req, res) {
     try {
@@ -38,7 +38,7 @@ class AutorController {
     } catch (erro) {
       res.status(500).json({ message: `${erro.message} - falha na atualização` });
     }
-  };
+  }
 
   static async excluirAutor (req, res) {
     try {
@@ -48,7 +48,7 @@ class AutorController {
     } catch (erro) {
       res.status(500).json({ message: `${erro.message} - falha na exclusão` });
     }
-  };
-};
+  }
+}
 
 export default AutorController;

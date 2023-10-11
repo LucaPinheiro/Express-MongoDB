@@ -4,22 +4,13 @@ import routes from "./routes/index.js";
 
 const conexao = await conectaNaDatabase();
 
-conexao.on("error", (erro) => {
-  console.log("erro de conexão", erro);
-});
-
+conexao.on("error", console.log.bind(console, "Erro de conexão"));
 conexao.once("open", () => {
   console.log("Conexão feita com sucesso");
 });
 
 const app = express();
+app.use(express.json());
 routes(app);
-
-
-app.delete("/livros/:id", (req, res) => {
-  const index = buscaLivro(req.params.id);
-  livros.splice(index, 1);
-  res.status(200).send("livro removido com sucesso");
-});
 
 export default app;
