@@ -1,3 +1,4 @@
+import NaoEncontrado from "../../erros/naoEncotrado.js";
 import { autor } from "../models/Autor.js";
 
 class AutorController {
@@ -18,7 +19,7 @@ class AutorController {
       if (autorEncontrado !== null) {
         res.status(200).json(autorEncontrado);
       } else {
-        res.status(404).json({ message: "falha na requisição do id do autor" });
+        next(new NaoEncontrado("falha na requisição do id do autor."));
       }
     } catch (erro) {
       next(erro);
