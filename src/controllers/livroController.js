@@ -1,3 +1,4 @@
+import NaoEncontrado from "../../erros/naoEncotrado.js";
 import { autor } from "../models/Autor.js";
 import livro from "../models/Livro.js";
 
@@ -11,15 +12,24 @@ class LivroController {
     }
   }
 
-  static async listarLivroPorId(req, res, next) {
+  static listarLivroPorId = async (req, res, next) => {
     try {
       const id = req.params.id;
-      const livroEncontrado = await livro.findById(id);
-      res.status(200).json(livroEncontrado);
+
+      const livroResultado = await livro
+        .findById(id)
+        .populate("autor", "nome")
+        .exec();
+
+      if (livroResultado !== null) {
+        res.status(200).send(livroResultado);
+      } else {
+        next(new NaoEncontrado("Id do livro não localizado."));
+      }
     } catch (erro) {
       next(erro);
     }
-  }
+  };
 
   static async cadastrarLivro(req, res, next) {
     const novoLivro = req.body;
@@ -36,25 +46,39 @@ class LivroController {
     }
   }
 
-  static async atualizarLivro(req, res, next) {
+  static atualizarLivro = async (req, res, next) => {
     try {
       const id = req.params.id;
-      await livro.findByIdAndUpdate(id, req.body);
-      res.status(200).json({ message: "livro atualizado" });
-    } catch (erro) {
-      next(erro);
-    }
-  }
 
-  static async apagarLivro(req, res, next) {
-    const id = req.params.id;
-    try {
-      await livro.findByIdAndDelete(id, req.body);
-      res.status(200).json({ message: "livro deletado" });
+      const livroResultado = await livro.findByIdAndUpdate(id, {
+        $set: req.body,
+      });
+
+      if (livroResultado !== null) {
+        res.status(200).send({ message: "Livro atualizado com sucesso" });
+      } else {
+        next(new NaoEncontrado("Id do livro não localizado."));
+      }
     } catch (erro) {
       next(erro);
     }
-  }
+  };
+
+  static apagarLivro = async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const livroResultado = await livro.findByIdAndDelete(id);
+
+      if (livroResultado !== null) {
+        res.status(200).send({message: "Livro removido com sucesso"});
+      } else {
+        next(new NaoEncontrado("Id do livro não localizado."));
+      }
+    } catch (erro) {
+      next(erro);
+    }
+  };
 
   static async listarLivrosPorEditora(req, res, next) {
     const editora = req.query.editora;
