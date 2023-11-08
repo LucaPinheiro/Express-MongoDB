@@ -53,15 +53,21 @@ class AutorController {
     }
   };
 
-  static async excluirAutor(req, res, next) {
+  static excluirAutor = async (req, res, next) => {
     try {
       const id = req.params.id;
-      await autor.findByIdAndDelete(id);
-      res.status(200).json({ message: "autor excluído com sucesso" });
+
+      const autorResultado = await autor.findByIdAndDelete(id);
+
+      if (autorResultado !== null) {
+        res.status(200).send({ message: "Autor removido com sucesso" });
+      } else {
+        next(new NaoEncontrado("Id do Autor não localizado."));
+      }
     } catch (erro) {
       next(erro);
     }
-  }
+  };
 }
 
 export default AutorController;
